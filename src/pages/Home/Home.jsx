@@ -10,7 +10,7 @@ const Home = () => {
     const [userInput, setUserInput] = useState("");
     const [activeWordId, setActiveWordId] = useState(0);
     const [activeWord, setActiveWord] = useState(words[0]);
-    const [activeWordData, setActiveWordData] = useState(null);
+    const [activeWordData, setActiveWordData] = useState([]);
     const [data, setData] = useState([]);
 
     function checkUserInput() {
@@ -18,6 +18,15 @@ const Home = () => {
         const userLetters = userInput.split("");
 
         let a = [];
+
+        // If user presses space and goes to next word
+        if (userInput.at(-1) === " ") {
+            setActiveWordData((prev) => [...prev, a]);
+            changeToNextWord();
+            setUserInput("");
+            return;
+        }
+
         for (let i = 0; i < userLetters.length; i++) {
             if (userLetters[i] == correctLetters[i]) {
                 a.push(1);
@@ -26,20 +35,12 @@ const Home = () => {
             }
         }
         console.log(a);
-
-        // If user presses space and goes to next word
-        if (
-            userInput.at(-1) === " " &&
-            userInput.length === activeWord.length
-        ) {
-            setActiveWordData((prev) => [...prev, a]);
-            changeToNextWord();
-        }
     }
 
     function changeToNextWord() {
         setActiveWordId((prev) => prev + 1);
-        setData([...prev, activeWordData]);
+        setActiveWord(words[activeWordId + 1]);
+        setData((prev) => [...prev, activeWordData]);
     }
 
     useEffect(() => {
@@ -49,8 +50,8 @@ const Home = () => {
     }, [userInput]);
 
     useEffect(() => {
-        console.log(data);
-    }, [data]);
+        console.log(activeWord);
+    }, [activeWord]);
 
     return (
         <main>
