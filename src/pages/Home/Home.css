@@ -1,0 +1,19 @@
+main {
+    height: 100dvh;
+    background-color: var(--c-background);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .wordsWrapper {
+        color: var(--c-text);
+        text-align: center;
+        font-size: 3rem;
+        width: 75rem;
+
+        .words {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
+}
