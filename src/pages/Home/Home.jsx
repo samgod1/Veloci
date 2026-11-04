@@ -5,13 +5,11 @@ import { useEffect } from "react";
 
 const Home = () => {
     const text = "The Hugo Award for Best.";
-    const [words, setWords] = useState(text.split(" "));
+    const [wordsData, setWordsData] = useState([]);
+
     const [userInput, setUserInput] = useState("");
     const [activeWordId, setActiveWordId] = useState(0);
-    const [activeWord, setActiveWord] = useState(words[0]);
-    const [activeWordData, setActiveWordData] = useState([]);
-    const [data, setData] = useState([]);
-    const [activeLetterData, setActiveLetterData] = useState([]);
+    const [activeWord, setActiveWord] = useState("");
 
     function checkUserInput() {
         const correctLetters = activeWord.split("");
@@ -24,28 +22,30 @@ const Home = () => {
             return;
         }
 
-        let updatedParticularData = data[activeWordId].map((value, i) => {
+        let updatedParticularStatus = activeWord.split("").map((_, i) => {
             if (!userLetters[i]) {
-                return 0;
+                return 2;
             }
 
             if (userLetters[i] == correctLetters[i]) {
                 return 1;
             } else {
-                return 2;
+                return 0;
             }
         });
 
-        let updatedData = data.map((value, i) => {
-            return i === activeWordId ? updatedParticularData : value;
+        let updatedWordsData = wordsData.map((data, i) => {
+            return activeWordId === i
+                ? { ...data, status: updatedParticularStatus }
+                : data;
         });
 
-        setData(updatedData);
+        setWordsData(updatedWordsData);
     }
 
     function changeToNextWord() {
         setActiveWordId((prev) => prev + 1);
-        setActiveWord(words[activeWordId + 1]);
+        setActiveWord(wordsData[activeWordId + 1].word);
     }
 
     useEffect(() => {
@@ -55,51 +55,39 @@ const Home = () => {
     }, [userInput]);
 
     useEffect(() => {
-        let updatedData = [];
-
-        words.map((word) => {
-            let defaultWordData = [];
-            for (let i = 0; i < word.length; i++) {
-                defaultWordData.push(0);
-            }
-            updatedData.push(defaultWordData);
+        const updatedWordsData = text.split(" ").map((word, i) => {
+            return {
+                id: i,
+                word: word,
+                status: Array(word.length).fill(2),
+                exceededWords: "",
+            };
         });
 
-        setData(updatedData);
-    }, [words]);
+        setWordsData(updatedWordsData);
+        setActiveWord(updatedWordsData[activeWordId].word);
+    }, []);
 
     return (
         <main>
             <div className="wordsWrapper">
                 <div className="words">
-                    {words.map((word, i) => (
-                        <span className="word" id={i} key={i}>
-                            {word.split("").map((letter, j) => {
-                                try {
-                                    if (data[i][j] == 1) {
-                                        return (
-                                            <span className="letter correct">
-                                                {letter}
-                                            </span>
-                                        );
-                                    } else if (data[i][j] == 2) {
-                                        return (
-                                            <span className="letter incorrect">
-                                                {letter}
-                                            </span>
-                                        );
-                                    } else {
-                                        return (
-                                            <span className="letter">
-                                                {letter}
-                                            </span>
-                                        );
-                                    }
-                                } catch (error) {
+                    {/* WORD */}
+                    {wordsData.map((data) => (
+                        <span className="word" id={data.id} key={data.id}>
+                            {/* LETTER */}
+                            {data.word.split("").map((letter, j) => {
+                                if (data.status[j] == 2) {
                                     return (
                                         <span className="letter">{letter}</span>
                                     );
                                 }
+
+                                return data.status[j] ? (
+                                    <span className="correct">{letter}</span>
+                                ) : (
+                                    <span className="incorrect">{letter}</span>
+                                );
                             })}
                         </span>
                     ))}
