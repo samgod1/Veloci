@@ -49,9 +49,7 @@ const Home = () => {
     }
 
     useEffect(() => {
-        if (userInput?.length) {
-            checkUserInput();
-        }
+        checkUserInput();
     }, [userInput]);
 
     useEffect(() => {
@@ -67,6 +65,10 @@ const Home = () => {
         setWordsData(updatedWordsData);
         setActiveWord(updatedWordsData[activeWordId].word);
     }, []);
+
+    useEffect(() => {
+        console.log(userInput);
+    }, [userInput]);
 
     return (
         <main>
@@ -84,9 +86,13 @@ const Home = () => {
                                 }
 
                                 return data.status[j] ? (
-                                    <span className="correct">{letter}</span>
+                                    <span className="letter correct">
+                                        {letter}
+                                    </span>
                                 ) : (
-                                    <span className="incorrect">{letter}</span>
+                                    <span className="letter incorrect">
+                                        {letter}
+                                    </span>
                                 );
                             })}
                         </span>
