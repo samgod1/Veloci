@@ -11,16 +11,22 @@ const Home = () => {
     const [activeWordId, setActiveWordId] = useState(0);
     const [activeWord, setActiveWord] = useState("");
 
-    function checkUserInput() {
+    function updateExceededWords() {
+        let noOfNewLetters = userInput.length - activeWord.length;
+        let exceededWords = userInput.slice(-noOfNewLetters);
+
+        setWordsData((prev) =>
+            prev.map((data, i) => {
+                return activeWordId === i
+                    ? { ...data, exceededWords: exceededWords }
+                    : data;
+            }),
+        );
+    }
+
+    function updateWordStatus() {
         const correctLetters = activeWord.split("");
         const userLetters = userInput.split("");
-
-        // If user presses space and goes to next word
-        if (userInput.at(-1) === " ") {
-            changeToNextWord();
-            setUserInput("");
-            return;
-        }
 
         let updatedParticularStatus = activeWord.split("").map((_, i) => {
             if (!userLetters[i]) {
@@ -34,13 +40,26 @@ const Home = () => {
             }
         });
 
-        let updatedWordsData = wordsData.map((data, i) => {
-            return activeWordId === i
-                ? { ...data, status: updatedParticularStatus }
-                : data;
-        });
+        setWordsData((prev) =>
+            prev.map((data, i) => {
+                return activeWordId === i
+                    ? { ...data, status: updatedParticularStatus }
+                    : data;
+            }),
+        );
+    }
 
-        setWordsData(updatedWordsData);
+    function checkUserInput() {
+        // Move to next word if user enters space
+        if (userInput.at(-1) === " ") {
+            changeToNextWord();
+            setUserInput("");
+            return;
+        }
+
+        if (userInput.length > activeWord.length) updateExceededWords();
+
+        updateWordStatus();
     }
 
     function changeToNextWord() {
@@ -67,8 +86,8 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
-        console.log(userInput);
-    }, [userInput]);
+        console.log(wordsData);
+    }, [wordsData]);
 
     return (
         <main>
@@ -95,6 +114,11 @@ const Home = () => {
                                     </span>
                                 );
                             })}
+
+                            {/* EXCEEDED WORDS */}
+                            <span className="exceededWords incorrect">
+                                {data.exceededWords}
+                            </span>
                         </span>
                     ))}
                 </div>
