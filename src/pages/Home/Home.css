@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+
 main {
     height: 100dvh;
     background-color: var(--c-background);
@@ -7,14 +9,22 @@ main {
 
     .wordsWrapper {
         color: var(--c-text);
-        text-align: center;
         font-size: 3rem;
         width: 75rem;
+        font-family: "JetBrains Mono", monospace;
 
         .words {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            position: relative;
+
+            .caret {
+                position: absolute;
+                background-color: black;
+                font-size: 1em;
+                top: 0;
+                left: 0;
+            }
 
             .correct {
                 color: var(--c-correct);

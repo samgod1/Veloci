@@ -10,6 +10,7 @@ const Home = () => {
     const [userInput, setUserInput] = useState("");
     const [activeWordId, setActiveWordId] = useState(0);
     const [activeWord, setActiveWord] = useState("");
+    const [caretLetter, setCaretLetter] = useState("");
 
     function updateExceededWords() {
         let noOfNewLetters = userInput.length - activeWord.length;
@@ -49,7 +50,19 @@ const Home = () => {
         );
     }
 
+    function updateCaretLetter() {
+        let userInputlength = userInput.length;
+        let letter =
+            activeWord[userInputlength] == undefined
+                ? " "
+                : activeWord[userInputlength];
+
+        setCaretLetter(letter);
+    }
+
     function checkUserInput() {
+        updateCaretLetter();
+
         // Move to next word if user enters space
         if (userInput.at(-1) === " ") {
             changeToNextWord();
@@ -72,6 +85,10 @@ const Home = () => {
     }, [userInput]);
 
     useEffect(() => {
+        updateCaretLetter();
+    }, [activeWord]);
+
+    useEffect(() => {
         const updatedWordsData = text.split(" ").map((word, i) => {
             return {
                 id: i,
@@ -85,14 +102,12 @@ const Home = () => {
         setActiveWord(updatedWordsData[activeWordId].word);
     }, []);
 
-    useEffect(() => {
-        console.log(wordsData);
-    }, [wordsData]);
-
     return (
         <main>
             <div className="wordsWrapper">
                 <div className="words">
+                    {/* CARET */}
+                    <span className="caret">{caretLetter}</span>
                     {/* WORD */}
                     {wordsData.map((data) => (
                         <span className="word" id={data.id} key={data.id}>
