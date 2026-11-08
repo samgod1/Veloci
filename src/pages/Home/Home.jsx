@@ -54,7 +54,7 @@ const Home = () => {
         let userInputlength = userInput.length;
         let letter =
             activeWord[userInputlength] == undefined
-                ? " "
+                ? "\xA0"
                 : activeWord[userInputlength];
 
         setCaretLetter(letter);
