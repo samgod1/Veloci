@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import "./Home.css";
 import { useEffect } from "react";
@@ -11,6 +11,9 @@ const Home = () => {
     const [activeWordId, setActiveWordId] = useState(0);
     const [activeWord, setActiveWord] = useState("");
     const [caretLetter, setCaretLetter] = useState("");
+    const [positionOfCaret, setPositionOfCaret] = useState(0);
+
+    const prevUserInputLengthRef = useRef(0);
 
     function updateExceededWords() {
         let noOfNewLetters = userInput.length - activeWord.length;
@@ -61,8 +64,6 @@ const Home = () => {
     }
 
     function checkUserInput() {
-        updateCaretLetter();
-
         // Move to next word if user enters space
         if (userInput.at(-1) === " ") {
             changeToNextWord();
@@ -75,12 +76,23 @@ const Home = () => {
         updateWordStatus();
     }
 
+    function moveCaret() {
+        console.log(prevUserInputLengthRef.current, userInput.length);
+        if (userInput.length > prevUserInputLengthRef.current) {
+            setPositionOfCaret((prev) => prev + 1);
+        } else if (userInput.length < prevUserInputLengthRef.current) {
+            setPositionOfCaret((prev) => prev - 1);
+        }
+    }
+
     function changeToNextWord() {
         setActiveWordId((prev) => prev + 1);
         setActiveWord(wordsData[activeWordId + 1].word);
     }
 
     useEffect(() => {
+        updateCaretLetter();
+        moveCaret();
         checkUserInput();
     }, [userInput]);
 
@@ -107,7 +119,14 @@ const Home = () => {
             <div className="wordsWrapper">
                 <div className="words">
                     {/* CARET */}
-                    <span className="caret">{caretLetter}</span>
+                    <span
+                        className="caret"
+                        style={{
+                            transform: `translateX(${positionOfCaret * 100}%)`,
+                        }}
+                    >
+                        {caretLetter}
+                    </span>
                     {/* WORD */}
                     {wordsData.map((data) => (
                         <span className="word" id={data.id} key={data.id}>
@@ -140,7 +159,10 @@ const Home = () => {
                 <input
                     type="text"
                     value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
+                    onChange={(e) => {
+                        prevUserInputLengthRef.current = userInput.length;
+                        setUserInput(e.target.value);
+                    }}
                 />
             </div>
         </main>
