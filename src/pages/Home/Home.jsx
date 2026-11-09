@@ -77,7 +77,6 @@ const Home = () => {
     }
 
     function moveCaret() {
-        console.log(prevUserInputLengthRef.current, userInput.length);
         if (userInput.length > prevUserInputLengthRef.current) {
             setPositionOfCaret((prev) => prev + 1);
         } else if (userInput.length < prevUserInputLengthRef.current) {
