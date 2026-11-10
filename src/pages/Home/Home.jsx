@@ -4,7 +4,9 @@ import "./Home.css";
 import { useEffect } from "react";
 
 const Home = () => {
-    const text = "The Hugo Award for Best.";
+    const [text, setText] = useState("Hello world is the best.");
+    const [letters, setLetters] = useState(text.split(""));
+    console.log(letters);
     const [wordsData, setWordsData] = useState([]);
 
     const [userInput, setUserInput] = useState("");
@@ -12,6 +14,7 @@ const Home = () => {
     const [activeWord, setActiveWord] = useState("");
     const [caretLetter, setCaretLetter] = useState("");
     const [positionOfCaret, setPositionOfCaret] = useState(0);
+    const [userInputCheck, setUserInputCheck] = useState([]);
 
     const prevUserInputLengthRef = useRef(0);
 
@@ -64,16 +67,17 @@ const Home = () => {
     }
 
     function checkUserInput() {
-        // Move to next word if user enters space
-        if (userInput.at(-1) === " ") {
-            changeToNextWord();
-            setUserInput("");
-            return;
-        }
-
         if (userInput.length > activeWord.length) updateExceededWords();
 
-        updateWordStatus();
+        const updatedUserInputCheck = userInput.split("").map((letter, i) => {
+            if (letter === letters[i]) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        setUserInputCheck(updatedUserInputCheck);
     }
 
     function moveCaret() {
@@ -126,37 +130,32 @@ const Home = () => {
                     >
                         {caretLetter}
                     </span>
-                    {/* WORD */}
-                    {wordsData.map((data) => (
-                        <span className="word" id={data.id} key={data.id}>
-                            {/* LETTER */}
-                            {data.word.split("").map((letter, j) => {
-                                if (data.status[j] == 2) {
-                                    return (
-                                        <span className="letter">{letter}</span>
-                                    );
-                                }
+                    {/* LETTERS */}
+                    {letters.map((letter, i) => {
+                        console.log(userInputCheck);
+                        if (userInputCheck[i] === undefined)
+                            return (
+                                <span className={"letter"} key={i}>
+                                    {letter === " " ? "\xA0" : letter}
+                                </span>
+                            );
 
-                                return data.status[j] ? (
-                                    <span className="letter correct">
-                                        {letter}
-                                    </span>
-                                ) : (
-                                    <span className="letter incorrect">
-                                        {letter}
-                                    </span>
-                                );
-                            })}
-
-                            {/* EXCEEDED WORDS */}
-                            <span className="exceededWords incorrect">
-                                {data.exceededWords}
-                            </span>
-                        </span>
-                    ))}
+                        if (userInputCheck[i]) {
+                            return (
+                                <span className={"letter correct"} key={i}>
+                                    {letter === " " ? "\xA0" : letter}
+                                </span>
+                            );
+                        } else {
+                            return (
+                                <span className={"letter incorrect"} key={i}>
+                                    {letter === " " ? "_" : letter}
+                                </span>
+                            );
+                        }
+                    })}
                 </div>
-                <input
-                    type="text"
+                <textarea
                     value={userInput}
                     onChange={(e) => {
                         prevUserInputLengthRef.current = userInput.length;
