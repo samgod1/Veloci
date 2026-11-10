@@ -6,55 +6,13 @@ import { useEffect } from "react";
 const Home = () => {
     const [text, setText] = useState("Hello world is the best.");
     const [letters, setLetters] = useState(text.split(""));
-    console.log(letters);
-    const [wordsData, setWordsData] = useState([]);
-
     const [userInput, setUserInput] = useState("");
-    const [activeWordId, setActiveWordId] = useState(0);
     const [activeWord, setActiveWord] = useState("");
     const [caretLetter, setCaretLetter] = useState("");
     const [positionOfCaret, setPositionOfCaret] = useState(0);
     const [userInputCheck, setUserInputCheck] = useState([]);
 
     const prevUserInputLengthRef = useRef(0);
-
-    function updateExceededWords() {
-        let noOfNewLetters = userInput.length - activeWord.length;
-        let exceededWords = userInput.slice(-noOfNewLetters);
-
-        setWordsData((prev) =>
-            prev.map((data, i) => {
-                return activeWordId === i
-                    ? { ...data, exceededWords: exceededWords }
-                    : data;
-            }),
-        );
-    }
-
-    function updateWordStatus() {
-        const correctLetters = activeWord.split("");
-        const userLetters = userInput.split("");
-
-        let updatedParticularStatus = activeWord.split("").map((_, i) => {
-            if (!userLetters[i]) {
-                return 2;
-            }
-
-            if (userLetters[i] == correctLetters[i]) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-
-        setWordsData((prev) =>
-            prev.map((data, i) => {
-                return activeWordId === i
-                    ? { ...data, status: updatedParticularStatus }
-                    : data;
-            }),
-        );
-    }
 
     function updateCaretLetter() {
         let userInputlength = userInput.length;
@@ -69,6 +27,7 @@ const Home = () => {
     function checkUserInput() {
         if (userInput.length > activeWord.length) updateExceededWords();
 
+        // userInputCheck data needs to be calculated every time from scratch maybe fix it in future if it causes performance issues
         const updatedUserInputCheck = userInput.split("").map((letter, i) => {
             if (letter === letters[i]) {
                 return 1;
@@ -88,34 +47,11 @@ const Home = () => {
         }
     }
 
-    function changeToNextWord() {
-        setActiveWordId((prev) => prev + 1);
-        setActiveWord(wordsData[activeWordId + 1].word);
-    }
-
     useEffect(() => {
         updateCaretLetter();
         moveCaret();
         checkUserInput();
     }, [userInput]);
-
-    useEffect(() => {
-        updateCaretLetter();
-    }, [activeWord]);
-
-    useEffect(() => {
-        const updatedWordsData = text.split(" ").map((word, i) => {
-            return {
-                id: i,
-                word: word,
-                status: Array(word.length).fill(2),
-                exceededWords: "",
-            };
-        });
-
-        setWordsData(updatedWordsData);
-        setActiveWord(updatedWordsData[activeWordId].word);
-    }, []);
 
     return (
         <main>
@@ -132,7 +68,6 @@ const Home = () => {
                     </span>
                     {/* LETTERS */}
                     {letters.map((letter, i) => {
-                        console.log(userInputCheck);
                         if (userInputCheck[i] === undefined)
                             return (
                                 <span className={"letter"} key={i}>
