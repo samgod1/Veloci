@@ -11,8 +11,6 @@ const Home = () => {
     const [positionOfCaret, setPositionOfCaret] = useState(0);
     const [userInputCheck, setUserInputCheck] = useState([]);
 
-    const prevUserInputLengthRef = useRef(0);
-
     function updateCaretLetter() {
         let letter = letters[userInput.length];
 
@@ -32,17 +30,10 @@ const Home = () => {
         setUserInputCheck(updatedUserInputCheck);
     }
 
-    function moveCaret() {
-        if (userInput.length > prevUserInputLengthRef.current) {
-            setPositionOfCaret((prev) => prev + 1);
-        } else if (userInput.length < prevUserInputLengthRef.current) {
-            setPositionOfCaret((prev) => prev - 1);
-        }
-    }
-
     useEffect(() => {
         updateCaretLetter();
-        moveCaret();
+        // Move caret
+        setPositionOfCaret(userInput.length);
         checkUserInput();
     }, [userInput]);
 
@@ -86,7 +77,6 @@ const Home = () => {
                 <textarea
                     value={userInput}
                     onChange={(e) => {
-                        prevUserInputLengthRef.current = userInput.length;
                         setUserInput(e.target.value);
                     }}
                 />
