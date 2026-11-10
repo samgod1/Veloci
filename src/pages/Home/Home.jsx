@@ -7,7 +7,6 @@ const Home = () => {
     const [text, setText] = useState("Hello world is the best.");
     const [letters, setLetters] = useState(text.split(""));
     const [userInput, setUserInput] = useState("");
-    const [activeWord, setActiveWord] = useState("");
     const [caretLetter, setCaretLetter] = useState("");
     const [positionOfCaret, setPositionOfCaret] = useState(0);
     const [userInputCheck, setUserInputCheck] = useState([]);
@@ -15,18 +14,12 @@ const Home = () => {
     const prevUserInputLengthRef = useRef(0);
 
     function updateCaretLetter() {
-        let userInputlength = userInput.length;
-        let letter =
-            activeWord[userInputlength] == undefined
-                ? "\xA0"
-                : activeWord[userInputlength];
+        let letter = letters[userInput.length];
 
-        setCaretLetter(letter);
+        setCaretLetter(letter === " " ? "\xA0" : letter);
     }
 
     function checkUserInput() {
-        if (userInput.length > activeWord.length) updateExceededWords();
-
         // userInputCheck data needs to be calculated every time from scratch maybe fix it in future if it causes performance issues
         const updatedUserInputCheck = userInput.split("").map((letter, i) => {
             if (letter === letters[i]) {
