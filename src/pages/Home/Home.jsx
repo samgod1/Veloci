@@ -4,12 +4,18 @@ import "./Home.css";
 import { useEffect } from "react";
 
 const Home = () => {
-    const [text, setText] = useState("Hello world is the best.");
+    const [text, setText] = useState(
+        "phantom is a 3-day escape room hackathon in philadelphia, from february 12-14, 2027. build creative projects for 50 hours to earn an invite, then spend a long weekend in a venue full of puzzles with everyone else who earned theirs.",
+    );
+    const [words, setWords] = useState(text.split(/(?<= )/));
     const [letters, setLetters] = useState(text.split(""));
     const [userInput, setUserInput] = useState("");
     const [caretLetter, setCaretLetter] = useState("");
     const [positionOfCaret, setPositionOfCaret] = useState(0);
     const [userInputCheck, setUserInputCheck] = useState([]);
+
+    // Starts from -1 cuz I need the index of letter to start from 0
+    let indexOfLetter = -1;
 
     function updateCaretLetter() {
         let letter = letters[userInput.length];
@@ -51,27 +57,51 @@ const Home = () => {
                         {caretLetter}
                     </span>
                     {/* LETTERS */}
-                    {letters.map((letter, i) => {
-                        if (userInputCheck[i] === undefined)
-                            return (
-                                <span className={"letter"} key={i}>
-                                    {letter === " " ? "\xA0" : letter}
-                                </span>
-                            );
+                    {words.map((word) => {
+                        return (
+                            <span className="word">
+                                {word.split("").map((letter) => {
+                                    indexOfLetter += 1;
 
-                        if (userInputCheck[i]) {
-                            return (
-                                <span className={"letter correct"} key={i}>
-                                    {letter === " " ? "\xA0" : letter}
-                                </span>
-                            );
-                        } else {
-                            return (
-                                <span className={"letter incorrect"} key={i}>
-                                    {letter === " " ? "_" : letter}
-                                </span>
-                            );
-                        }
+                                    if (
+                                        userInputCheck[indexOfLetter] ===
+                                        undefined
+                                    )
+                                        return (
+                                            <span
+                                                className={"letter"}
+                                                key={indexOfLetter}
+                                            >
+                                                {letter === " "
+                                                    ? "\xA0"
+                                                    : letter}
+                                            </span>
+                                        );
+
+                                    if (userInputCheck[indexOfLetter]) {
+                                        return (
+                                            <span
+                                                className={"letter correct"}
+                                                key={indexOfLetter}
+                                            >
+                                                {letter === " "
+                                                    ? "\xA0"
+                                                    : letter}
+                                            </span>
+                                        );
+                                    } else {
+                                        return (
+                                            <span
+                                                className={"letter incorrect"}
+                                                key={indexOfLetter}
+                                            >
+                                                {letter === " " ? "_" : letter}
+                                            </span>
+                                        );
+                                    }
+                                })}
+                            </span>
+                        );
                     })}
                 </div>
                 <textarea

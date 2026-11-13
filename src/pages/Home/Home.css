@@ -18,10 +18,6 @@ main {
             flex-wrap: wrap;
             position: relative;
 
-            .word {
-                margin-right: 0.6em;
-            }
-
             .caret {
                 position: absolute;
                 background-color: black;
