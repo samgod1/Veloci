@@ -11,11 +11,10 @@ const Home = () => {
     const [letters, setLetters] = useState(text.split(""));
     const [userInput, setUserInput] = useState("");
     const [caretLetter, setCaretLetter] = useState("");
-    const [positionOfCaret, setPositionOfCaret] = useState(0);
+    const [positionOfCaret, setPositionOfCaret] = useState({ x: 0, y: 0 });
     const [userInputCheck, setUserInputCheck] = useState([]);
 
-    // Starts from -1 cuz I need the index of letter to start from 0
-    let indexOfLetter = -1;
+    const charsRef = useRef([]);
 
     function updateCaretLetter() {
         let letter = letters[userInput.length];
@@ -36,10 +35,18 @@ const Home = () => {
         setUserInputCheck(updatedUserInputCheck);
     }
 
+    function moveCaret() {
+        const activeSpan = charsRef.current[userInput.length];
+
+        let x = activeSpan.offsetLeft;
+        let y = activeSpan.offsetTop;
+
+        setPositionOfCaret({ x: x, y: y });
+    }
+
     useEffect(() => {
         updateCaretLetter();
-        // Move caret
-        setPositionOfCaret(userInput.length);
+        moveCaret();
         checkUserInput();
     }, [userInput]);
 
@@ -51,17 +58,25 @@ const Home = () => {
                     <span
                         className="caret"
                         style={{
-                            transform: `translateX(${positionOfCaret * 100}%)`,
+                            transform: `translate(${positionOfCaret.x}px, ${positionOfCaret.y}px)`,
                         }}
                     >
                         {caretLetter}
                     </span>
-                    {/* LETTERS */}
-                    {words.map((word) => {
+
+                    {/* WORDS */}
+                    {words.map((word, wordIndex) => {
                         return (
                             <span className="word">
-                                {word.split("").map((letter) => {
-                                    indexOfLetter += 1;
+                                {/* LETTERS */}
+                                {word.split("").map((letter, letterIndex) => {
+                                    const indexOfLetter =
+                                        words
+                                            .slice(0, wordIndex)
+                                            .reduce(
+                                                (acc, w) => acc + w.length,
+                                                0,
+                                            ) + letterIndex;
 
                                     if (
                                         userInputCheck[indexOfLetter] ===
@@ -71,6 +86,11 @@ const Home = () => {
                                             <span
                                                 className={"letter"}
                                                 key={indexOfLetter}
+                                                ref={(element) => {
+                                                    charsRef.current[
+                                                        indexOfLetter
+                                                    ] = element;
+                                                }}
                                             >
                                                 {letter === " "
                                                     ? "\xA0"
@@ -83,6 +103,11 @@ const Home = () => {
                                             <span
                                                 className={"letter correct"}
                                                 key={indexOfLetter}
+                                                ref={(element) =>
+                                                    (charsRef.current[
+                                                        indexOfLetter
+                                                    ] = element)
+                                                }
                                             >
                                                 {letter === " "
                                                     ? "\xA0"
@@ -94,6 +119,11 @@ const Home = () => {
                                             <span
                                                 className={"letter incorrect"}
                                                 key={indexOfLetter}
+                                                ref={(element) =>
+                                                    (charsRef.current[
+                                                        indexOfLetter
+                                                    ] = element)
+                                                }
                                             >
                                                 {letter === " " ? "_" : letter}
                                             </span>
