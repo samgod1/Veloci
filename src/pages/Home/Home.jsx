@@ -70,7 +70,7 @@ const Home = () => {
                             <span className="word">
                                 {/* LETTERS */}
                                 {word.split("").map((letter, letterIndex) => {
-                                    const indexOfLetter =
+                                    const globalIndexOfLetter =
                                         words
                                             .slice(0, wordIndex)
                                             .reduce(
@@ -79,16 +79,16 @@ const Home = () => {
                                             ) + letterIndex;
 
                                     if (
-                                        userInputCheck[indexOfLetter] ===
+                                        userInputCheck[globalIndexOfLetter] ===
                                         undefined
                                     )
                                         return (
                                             <span
                                                 className={"letter"}
-                                                key={indexOfLetter}
+                                                key={globalIndexOfLetter}
                                                 ref={(element) => {
                                                     charsRef.current[
-                                                        indexOfLetter
+                                                        globalIndexOfLetter
                                                     ] = element;
                                                 }}
                                             >
@@ -98,14 +98,14 @@ const Home = () => {
                                             </span>
                                         );
 
-                                    if (userInputCheck[indexOfLetter]) {
+                                    if (userInputCheck[globalIndexOfLetter]) {
                                         return (
                                             <span
                                                 className={"letter correct"}
-                                                key={indexOfLetter}
+                                                key={globalIndexOfLetter}
                                                 ref={(element) =>
                                                     (charsRef.current[
-                                                        indexOfLetter
+                                                        globalIndexOfLetter
                                                     ] = element)
                                                 }
                                             >
@@ -118,10 +118,10 @@ const Home = () => {
                                         return (
                                             <span
                                                 className={"letter incorrect"}
-                                                key={indexOfLetter}
+                                                key={globalIndexOfLetter}
                                                 ref={(element) =>
                                                     (charsRef.current[
-                                                        indexOfLetter
+                                                        globalIndexOfLetter
                                                     ] = element)
                                                 }
                                             >
