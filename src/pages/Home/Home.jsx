@@ -10,17 +10,12 @@ const Home = () => {
     const [words, setWords] = useState(text.split(/(?<= )/));
     const [letters, setLetters] = useState(text.split(""));
     const [userInput, setUserInput] = useState("");
-    const [caretLetter, setCaretLetter] = useState("");
     const [positionOfCaret, setPositionOfCaret] = useState({ x: 0, y: 0 });
     const [userInputCheck, setUserInputCheck] = useState([]);
+    const [currentLine, setCurrentLine] = useState(0);
 
     const charsRef = useRef([]);
-
-    function updateCaretLetter() {
-        let letter = letters[userInput.length];
-
-        setCaretLetter(letter === " " ? "\xA0" : letter);
-    }
+    const prevLetterPositionRef = useRef(0);
 
     function checkUserInput() {
         // userInputCheck data needs to be calculated every time from scratch maybe fix it in future if it causes performance issues
@@ -44,16 +39,34 @@ const Home = () => {
         setPositionOfCaret({ x: x, y: y });
     }
 
+    function checkCurrentLine() {
+        const currentLetterPosition =
+            charsRef.current[userInput.length].offsetTop;
+
+        if (currentLetterPosition > prevLetterPositionRef.current) {
+            setCurrentLine((prev) => prev + 1);
+        } else if (prevLetterPositionRef.current > currentLetterPosition) {
+            setCurrentLine((prev) => prev - 1);
+        }
+
+        prevLetterPositionRef.current = currentLetterPosition;
+    }
+
     useEffect(() => {
-        updateCaretLetter();
         moveCaret();
         checkUserInput();
+        checkCurrentLine();
     }, [userInput]);
 
     return (
         <main>
             <div className="wordsWrapper">
-                <div className="words">
+                <div
+                    className="words"
+                    style={{
+                        top: `-${currentLine >= 2 ? (currentLine - 1) * 1.3 : 0}em`,
+                    }}
+                >
                     {/* CARET */}
                     <span
                         className="caret"
