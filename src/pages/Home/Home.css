@@ -14,6 +14,8 @@ main {
         width: 75rem;
         font-family: "Roboto Mono", monospace;
         position: relative;
+        height: 4em;
+        overflow: hidden;
 
         textarea {
             opacity: 0;
