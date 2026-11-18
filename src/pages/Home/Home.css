@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
 
 main {
     height: 100dvh;
@@ -11,25 +12,35 @@ main {
         color: var(--c-text);
         font-size: 3rem;
         width: 75rem;
-        font-family: "JetBrains Mono", monospace;
+        font-family: "Roboto Mono", monospace;
         position: relative;
-        height: 4em;
-        overflow: hidden;
+
+        textarea {
+            opacity: 0;
+        }
 
         .words {
             display: flex;
             flex-wrap: wrap;
             position: absolute;
+            z-index: 2;
 
             .caret {
                 position: absolute;
                 background-color: black;
                 top: 0;
                 left: 0;
+                width: 0.6em;
+                height: 1.3em;
+                z-index: -1;
                 animation-name: blinking;
                 animation-duration: 1s;
                 animation-iteration-count: infinite;
                 transition: transform 0.1s ease;
+            }
+
+            .letter {
+                vertical-align: bottom;
             }
 
             .correct {

@@ -60,9 +60,7 @@ const Home = () => {
                         style={{
                             transform: `translate(${positionOfCaret.x}px, ${positionOfCaret.y}px)`,
                         }}
-                    >
-                        {caretLetter}
-                    </span>
+                    ></span>
 
                     {/* WORDS */}
                     {words.map((word, wordIndex) => {
