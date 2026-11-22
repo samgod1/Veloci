@@ -14,8 +14,12 @@ const Home = () => {
     const [userInputCheck, setUserInputCheck] = useState([]);
     const [currentLine, setCurrentLine] = useState(0);
 
+    const [hasStarted, setHasStarted] = useState(false);
+    const [timer, setTimer] = useState(30);
+
     const charsRef = useRef([]);
     const prevLetterPositionRef = useRef(0);
+    const timerIntervalRef = useRef(null);
 
     function checkUserInput() {
         // userInputCheck data needs to be calculated every time from scratch maybe fix it in future if it causes performance issues
@@ -52,19 +56,46 @@ const Home = () => {
         prevLetterPositionRef.current = currentLetterPosition;
     }
 
+    function startTimer() {
+        timerIntervalRef.current = setInterval(() => {
+            setTimer((prev) => prev - 1);
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerIntervalRef.current);
+        setHasStarted(false);
+    }
+
     useEffect(() => {
+        if (!hasStarted && userInput.length > 0) {
+            setHasStarted(true);
+        }
         moveCaret();
         checkUserInput();
         checkCurrentLine();
     }, [userInput]);
 
+    useEffect(() => {
+        if (hasStarted) {
+            startTimer();
+        }
+    }, [hasStarted]);
+
+    useEffect(() => {
+        if (timer <= 0) {
+            stopTimer();
+        }
+    }, [timer]);
+
     return (
         <main>
+            <div className="timer">{timer}</div>
             <div className="wordsWrapper">
                 <div
                     className="words"
                     style={{
-                        top: `-${currentLine >= 2 ? (currentLine - 1) * 1.3 : 0}em`,
+                        top: `-${currentLine >= 2 ? (currentLine - 1) * 1.4 : 0}em`,
                     }}
                 >
                     {/* CARET */}

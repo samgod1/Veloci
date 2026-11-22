@@ -26,6 +26,7 @@ main {
             flex-wrap: wrap;
             position: absolute;
             z-index: 2;
+            transition: top 0.1s ease;
 
             .caret {
                 position: absolute;
