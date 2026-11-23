@@ -27,7 +27,6 @@ const Timer = () => {
 
     useEffect(() => {
         if (timer <= 0) {
-            console.log("hello");
             stopTimer();
         }
     }, [timer]);
