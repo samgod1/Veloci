@@ -5,8 +5,15 @@ main {
     height: 100dvh;
     background-color: var(--c-background);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    .timer {
+        color: var(--c-text);
+        font-family: "JetBrains Mono";
+        font-size: 1.5rem;
+    }
 
     .wordsWrapper {
         color: var(--c-text);
