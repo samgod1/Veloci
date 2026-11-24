@@ -4,6 +4,7 @@ import "./Home.css";
 import { createContext } from "react";
 import Timer from "./components/Timer/Timer";
 import TypingArea from "./components/TypingArea/TypingArea";
+import Stats from "./components/Stats/Stats";
 import { useEffect } from "react";
 
 export const GlobalContext = createContext();
@@ -11,6 +12,7 @@ export const GlobalContext = createContext();
 const Home = () => {
     const [userInputCheck, setUserInputCheck] = useState([]);
     const [hasStarted, setHasStarted] = useState(false);
+    const [hasFinished, setHasFinished] = useState(false);
     const [startingTime, setStartingTime] = useState(5);
     const [timer, setTimer] = useState(startingTime);
     const [wpm, setWpm] = useState(0);
@@ -33,15 +35,15 @@ const Home = () => {
             0,
         );
 
-        setWpm((correct_letters_typed / 5) * (60 / startingTime));
-        setAccuracy((correct_letters_typed / totalUserInput) * 100);
+        setWpm(Math.floor((correct_letters_typed / 5) * (60 / startingTime)));
+        setAccuracy(Math.floor((correct_letters_typed / totalUserInput) * 100));
     }
 
     useEffect(() => {
-        if (!hasStarted) {
+        if (hasFinished) {
             calculateWpmAndAccuracy();
         }
-    }, [hasStarted]);
+    }, [hasFinished]);
 
     return (
         <GlobalContext
@@ -50,13 +52,22 @@ const Home = () => {
                 setUserInputCheck,
                 hasStarted,
                 setHasStarted,
+                setHasFinished,
                 timer,
                 setTimer,
+                wpm,
+                accuracy,
             }}
         >
             <main>
-                <Timer />
-                <TypingArea />
+                {hasFinished ? (
+                    <Stats />
+                ) : (
+                    <>
+                        <Timer />
+                        <TypingArea />
+                    </>
+                )}
             </main>
         </GlobalContext>
     );

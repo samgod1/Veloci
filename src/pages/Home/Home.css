@@ -8,18 +8,16 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-family: "JetBrains Mono";
+    color: var(--c-text);
 
     .timer {
-        color: var(--c-text);
-        font-family: "JetBrains Mono";
         font-size: 1.5rem;
     }
 
     .wordsWrapper {
-        color: var(--c-text);
         font-size: 3rem;
         width: 75rem;
-        font-family: "Roboto Mono", monospace;
         position: relative;
         height: 4em;
         overflow: hidden;
@@ -57,6 +55,10 @@ main {
                 color: var(--c-incorrect);
             }
         }
+    }
+
+    .stats {
+        font-size: 4rem;
     }
 }
 

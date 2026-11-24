@@ -3,7 +3,7 @@ import { useRef, useEffect, useContext } from "react";
 import { GlobalContext } from "../../Home";
 
 const Timer = () => {
-    const { timer, setTimer, hasStarted, setHasStarted } =
+    const { timer, setTimer, hasStarted, setHasStarted, setHasFinished } =
         useContext(GlobalContext);
 
     const timerIntervalRef = useRef(null);
@@ -17,6 +17,7 @@ const Timer = () => {
     function stopTimer() {
         clearInterval(timerIntervalRef.current);
         setHasStarted(false);
+        setHasFinished(true);
     }
 
     useEffect(() => {
