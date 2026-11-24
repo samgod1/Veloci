@@ -43,10 +43,6 @@ const Home = () => {
         }
     }, [hasStarted]);
 
-    useEffect(() => {
-        console.log(wpm, accuracy);
-    }, [wpm]);
-
     return (
         <GlobalContext
             value={{

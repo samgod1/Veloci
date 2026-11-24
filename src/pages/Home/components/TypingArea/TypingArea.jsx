@@ -14,7 +14,6 @@ const TypingArea = ({ checkUserInput }) => {
     const [words, setWords] = useState(text.split(/(?<= )/));
     const [letters, setLetters] = useState(text.split(""));
     const [userInput, setUserInput] = useState("");
-    const [positionOfCaret, setPositionOfCaret] = useState({ x: 0, y: 0 });
     const [currentLine, setCurrentLine] = useState(0);
 
     const charsRef = useRef([]);
@@ -36,15 +35,6 @@ const TypingArea = ({ checkUserInput }) => {
         setUserInputCheck(updatedUserInputCheck);
     }
 
-    function moveCaret() {
-        const activeSpan = charsRef.current[userInput.length];
-
-        let x = activeSpan.offsetLeft;
-        let y = activeSpan.offsetTop;
-
-        setPositionOfCaret({ x: x, y: y });
-    }
-
     function checkCurrentLine() {
         const currentLetterPosition =
             charsRef.current[userInput.length].offsetTop;
@@ -62,7 +52,6 @@ const TypingArea = ({ checkUserInput }) => {
         if (!hasStarted && userInput.length > 0) {
             setHasStarted(true);
         }
-        moveCaret();
         checkUserInput();
         checkCurrentLine();
     }, [userInput]);
@@ -74,7 +63,6 @@ const TypingArea = ({ checkUserInput }) => {
                 letters,
                 userInput,
                 setUserInput,
-                positionOfCaret,
                 currentLine,
                 charsRef,
                 prevLetterPositionRef,
