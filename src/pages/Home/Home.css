@@ -35,7 +35,7 @@ main {
 
             .caret {
                 position: absolute;
-                background-color: black;
+                background-color: #111111;
                 top: 0;
                 left: 0;
                 width: 0.6em;
@@ -74,6 +74,32 @@ main {
 
     .restartBtn:hover {
         cursor: pointer;
+    }
+
+    .keymap {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25em;
+
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 0.25em;
+
+            .key {
+                display: inline-block;
+                background-color: var(--c-background-muted);
+                width: 2em;
+                height: 2em;
+                border-radius: 0.25rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .space {
+                width: 10em;
+            }
+        }
     }
 }
 

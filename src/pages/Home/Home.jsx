@@ -7,6 +7,7 @@ import TypingArea from "./components/TypingArea/TypingArea";
 import Restart from "./components/TypingArea/Restart/Restart";
 import Stats from "./components/Stats/Stats";
 import { useEffect } from "react";
+import Keymap from "./components/Keymap/Keymap";
 
 export const GlobalContext = createContext();
 
@@ -71,6 +72,7 @@ const Home = () => {
                     <>
                         <Timer />
                         <TypingArea />
+                        <Keymap />
                     </>
                 )}
             </main>
