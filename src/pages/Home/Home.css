@@ -60,6 +60,21 @@ main {
     .stats {
         font-size: 4rem;
     }
+
+    .restartBtn {
+        background-color: transparent;
+        color: var(--c-gray);
+        border: none;
+    }
+
+    .restartBtn:focus {
+        outline: none;
+        color: var(--c-text);
+    }
+
+    .restartBtn:hover {
+        cursor: pointer;
+    }
 }
 
 @keyframes blinking {

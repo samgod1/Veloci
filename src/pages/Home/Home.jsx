@@ -4,6 +4,7 @@ import "./Home.css";
 import { createContext } from "react";
 import Timer from "./components/Timer/Timer";
 import TypingArea from "./components/TypingArea/TypingArea";
+import Restart from "./components/TypingArea/Restart/Restart";
 import Stats from "./components/Stats/Stats";
 import { useEffect } from "react";
 
@@ -53,6 +54,7 @@ const Home = () => {
                 hasStarted,
                 setHasStarted,
                 setHasFinished,
+                startingTime,
                 timer,
                 setTimer,
                 wpm,
@@ -61,7 +63,10 @@ const Home = () => {
         >
             <main>
                 {hasFinished ? (
-                    <Stats />
+                    <>
+                        <Stats />
+                        <Restart />
+                    </>
                 ) : (
                     <>
                         <Timer />
