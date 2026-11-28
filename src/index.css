@@ -7,6 +7,8 @@
 :root {
     --c-background: #242038;
     --c-background-muted: #353044;
+    --c-background-light: #827b98;
+    --c-caret: #111111;
     --c-text: #dddbff;
     --c-correct: #71f79f;
     --c-incorrect: #a53860;
